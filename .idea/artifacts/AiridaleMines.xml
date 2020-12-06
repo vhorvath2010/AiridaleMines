@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AiridaleMines">
+    <output-path>$PROJECT_DIR$/../../../../Spigot Local/Spigot Servers/1.16 Server/plugins</output-path>
+    <root id="archive" name="AiridaleMines.jar">
+      <element id="module-output" name="AiridaleMines" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/config.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/mines.yml" />
+    </root>
+  </artifact>
+</component>

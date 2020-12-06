@@ -10,5 +10,15 @@ commands:
   CreateSchematicMine:
     aliases: [csmine]
     permission: mine.create
-    usage: "&C/CreateSchematicMine [name]; ensure you have a WorldEdit region selected!"
-    permission-message: "&CYou do not have permission to do that!"
+    usage: "§C/CreateSchematicMine [name]; ensure you have a WorldEdit region selected!"
+    permission-message: "§CYou do not have permission to do that!"
+  SetNotifyArea:
+    aliases: [setna, sna]
+    permission: mine.create
+    usage: "§C/SetNotifyArea [name]; ensure you have a WorldEdit region selected"
+    permission-message: "§CYou do not have permission to do that!"
+  CreatePercentMine:
+    aliases: [createpercmine, createpm, cpmine]
+    permission: mine.create
+    permission-message: "§CYou do not have permission to do that!"
+    usage: "§C/CreatePercentMine [name]; ensure you have a WorldEdit region selected!"

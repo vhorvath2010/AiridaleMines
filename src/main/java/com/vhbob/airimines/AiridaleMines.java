@@ -1,8 +1,12 @@
 package com.vhbob.airimines;
 
+import com.vhbob.airimines.commands.CreatePercentMine;
 import com.vhbob.airimines.commands.CreateSchematicMine;
+import com.vhbob.airimines.commands.SetNotifyArea;
 import com.vhbob.airimines.mines.Mine;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -20,11 +24,28 @@ public class AiridaleMines extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         getCommand("CreateSchematicMine").setExecutor(new CreateSchematicMine());
+        getCommand("CreatePercentMine").setExecutor(new CreatePercentMine());
+        getCommand("SetNotifyArea").setExecutor(new SetNotifyArea());
         // Setup data files
         saveDefaultConfig();
-        minesFile = new File(plugin.getDataFolder(), "mines.yml");
+        createMineData();
         // Load mines
         activeMines = new ArrayList<>();
+    }
+
+    private void createMineData() {
+        minesFile = new File(plugin.getDataFolder(), "mines.yml");
+        if (!minesFile.exists()) {
+            minesFile.getParentFile().mkdirs();
+            saveResource("mines.yml", false);
+        }
+
+        minesConfig = new YamlConfiguration();
+        try {
+            minesConfig.load(minesFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -47,6 +68,14 @@ public class AiridaleMines extends JavaPlugin {
 
     public void registerMine(Mine mine) {
         activeMines.add(mine);
+    }
+
+    // Get a mine by name
+    public Mine getMine(String name) {
+        for (Mine mine : activeMines)
+            if (mine.getName().equalsIgnoreCase(name))
+                return mine;
+        return null;
     }
 
 }

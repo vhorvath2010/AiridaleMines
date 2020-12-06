@@ -8,10 +8,10 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operations;
-import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.SessionOwner;
 import com.vhbob.airimines.AiridaleMines;
+import com.vhbob.airimines.mines.PercentMine;
 import com.vhbob.airimines.mines.SchematicMine;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,11 +19,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CreateSchematicMine implements CommandExecutor {
+public class CreatePercentMine implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (command.getName().equalsIgnoreCase("CreateSchematicMine")) {
+        if (command.getName().equalsIgnoreCase("CreatePercentMine")) {
             if (strings.length == 1) {
                 if (commandSender instanceof Player) {
                     Player p = (Player) commandSender;
@@ -31,19 +31,9 @@ public class CreateSchematicMine implements CommandExecutor {
                         try {
                             Region region = WorldEdit.getInstance().getSessionManager().get((SessionOwner) BukkitAdapter.adapt(p))
                                     .getSelection(BukkitAdapter.adapt(p.getWorld()));
-                            BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
-                            try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory()
-                                    .getEditSession(BukkitAdapter.adapt(p.getWorld()), -1)) {
-                                ForwardExtentCopy forwardExtentCopy = new ForwardExtentCopy(
-                                        editSession, region, clipboard, region.getMinimumPoint()
-                                );
-                                Operations.complete(forwardExtentCopy);
-                            } catch (WorldEditException e) {
-                                return false;
-                            }
-                            SchematicMine mine = new SchematicMine(strings[0], region, clipboard);
+                            PercentMine mine = new PercentMine(strings[0], region);
                             AiridaleMines.getPlugin().registerMine(mine);
-                            p.sendMessage(ChatColor.GREEN + "Schematic mine created! Remember to set the notification area!");
+                            p.sendMessage(ChatColor.GREEN + "Percentage mine created! Remember to set the notification area and add block rates!");
                             return true;
                         } catch (IncompleteRegionException e) {
                             return false;

@@ -8,14 +8,25 @@ import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
+import com.vhbob.airimines.AiridaleMines;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class SchematicMine extends Mine {
 
     private BlockArrayClipboard schematic;
 
-    public SchematicMine(Region mineBlocks, BlockArrayClipboard schematic) {
+    public SchematicMine(String name, Region mineBlocks, BlockArrayClipboard schematic) {
+        this.name = name;
         this.mineBlocks = mineBlocks;
         this.schematic = schematic;
+        // Schedule resets
+        long delay = (long) (20 * AiridaleMines.getPlugin().getConfig().getDouble("reset-interval"));
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                reset();
+            }
+        }.runTaskTimer(AiridaleMines.getPlugin(), delay, delay);
     }
 
     @Override

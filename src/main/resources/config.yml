@@ -1,0 +1,2 @@
+# This is how often each mine resets (in seconds)
+reset-interval: 10

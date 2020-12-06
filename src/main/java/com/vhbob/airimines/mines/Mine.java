@@ -10,6 +10,7 @@ public abstract class Mine {
 
     Region mineBlocks;
     Region notificationRegion;
+    String name;
 
     // This method will begin to reset the mine
     public void reset() {
@@ -21,4 +22,11 @@ public abstract class Mine {
         }
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setNotificationRegion(Region notificationRegion) {
+        this.notificationRegion = notificationRegion;
+    }
 }
