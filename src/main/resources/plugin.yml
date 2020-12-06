@@ -3,3 +3,12 @@ name: AiridaleMines
 version: 1.0
 author: Vhbob
 description: A mines plugin for AiridaleMC
+depend:
+  - WorldEdit
+  - WorldGuard
+commands:
+  CreateSchematicMine:
+    aliases: [csmine]
+    permission: mine.create
+    usage: "&C/CreateSchematicMine [name]; ensure you have a WorldEdit region selected!"
+    permission-message: "&CYou do not have permission to do that!"
