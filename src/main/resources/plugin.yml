@@ -22,3 +22,8 @@ commands:
     permission: mine.create
     permission-message: "§CYou do not have permission to do that!"
     usage: "§C/CreatePercentMine [name]; ensure you have a WorldEdit region selected!"
+  SetMineChance:
+    aliases: [setminech, setmch, smc]
+    permission: mine.create
+    permission-message: "§CYou do not have permission to do that!"
+    usage: "§C/SetMineChance [mine-name] [material] [chance]"

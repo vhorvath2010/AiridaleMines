@@ -2,6 +2,7 @@ package com.vhbob.airimines;
 
 import com.vhbob.airimines.commands.CreatePercentMine;
 import com.vhbob.airimines.commands.CreateSchematicMine;
+import com.vhbob.airimines.commands.SetMineChance;
 import com.vhbob.airimines.commands.SetNotifyArea;
 import com.vhbob.airimines.mines.Mine;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -26,6 +27,7 @@ public class AiridaleMines extends JavaPlugin {
         getCommand("CreateSchematicMine").setExecutor(new CreateSchematicMine());
         getCommand("CreatePercentMine").setExecutor(new CreatePercentMine());
         getCommand("SetNotifyArea").setExecutor(new SetNotifyArea());
+        getCommand("SetMineChance").setExecutor(new SetMineChance());
         // Setup data files
         saveDefaultConfig();
         createMineData();
@@ -76,6 +78,10 @@ public class AiridaleMines extends JavaPlugin {
             if (mine.getName().equalsIgnoreCase(name))
                 return mine;
         return null;
+    }
+
+    public int numActiveMines() {
+        return activeMines.size();
     }
 
 }

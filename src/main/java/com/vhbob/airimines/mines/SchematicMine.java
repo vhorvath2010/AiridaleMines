@@ -19,6 +19,9 @@ public class SchematicMine extends Mine {
         this.name = name;
         this.mineBlocks = mineBlocks;
         this.schematic = schematic;
+        // Calculate offset for mine reset
+        int mines = AiridaleMines.getPlugin().numActiveMines();
+        long offset = (long) 100 * mines;
         // Schedule resets
         long delay = (long) (20 * AiridaleMines.getPlugin().getConfig().getDouble("reset-interval"));
         new BukkitRunnable() {
@@ -26,7 +29,7 @@ public class SchematicMine extends Mine {
             public void run() {
                 reset();
             }
-        }.runTaskTimer(AiridaleMines.getPlugin(), delay, delay);
+        }.runTaskTimer(AiridaleMines.getPlugin(), offset, delay);
     }
 
     @Override
