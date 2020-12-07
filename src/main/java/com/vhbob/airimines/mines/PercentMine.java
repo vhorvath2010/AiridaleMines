@@ -3,12 +3,11 @@ package com.vhbob.airimines.mines;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.vhbob.airimines.AiridaleMines;
 import com.vhbob.airimines.util.RandomCollection;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -40,17 +39,22 @@ public class PercentMine extends Mine {
         BlockVector3 max = mineBlocks.getMaximumPoint();
         int configDelay = AiridaleMines.getPlugin().getConfig().getInt("layer-delay");
         final World world = Bukkit.getWorld(mineBlocks.getWorld().getName());
-        for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
-            if (notificationRegion.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
-                p.teleport(locTp);
-            }
-        }
         for (int y = min.getBlockY(); y <= max.getBlockY(); ++y) {
             int delay = configDelay * (y - min.getBlockY());
             int finalY = y;
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    // TP players out of this layer
+                    BlockVector3 layerMin = BlockVector3.at(min.getX(), finalY, min.getZ());
+                    BlockVector3 layerMax = BlockVector3.at(max.getX(), finalY, max.getZ());
+                    ProtectedRegion region = new ProtectedCuboidRegion("test", layerMin, layerMax);
+                    for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
+                        if (region.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
+                            p.teleport(locTp);
+                        }
+                    }
+                    // Set blocks
                     for (int x = min.getBlockX(); x <= max.getBlockX(); ++x) {
                         for (int z = min.getBlockZ(); z <= max.getBlockZ(); ++z) {
                             Location loc = new Location(world, x, finalY, z);
