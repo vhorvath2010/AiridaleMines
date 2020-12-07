@@ -12,18 +12,22 @@ commands:
     permission: mine.create
     usage: "§C/CreateSchematicMine [name]; ensure you have a WorldEdit region selected!"
     permission-message: "§CYou do not have permission to do that!"
+    description: This command creates a schematic mine with the blocks in your selected area
   SetNotifyArea:
     aliases: [setna, sna]
     permission: mine.create
     usage: "§C/SetNotifyArea [name]; ensure you have a WorldEdit region selected"
     permission-message: "§CYou do not have permission to do that!"
+    description: This command sets the notify area for a mine in your selected area
   CreatePercentMine:
     aliases: [createpercmine, createpm, cpmine]
     permission: mine.create
     permission-message: "§CYou do not have permission to do that!"
     usage: "§C/CreatePercentMine [name]; ensure you have a WorldEdit region selected!"
+    description: This command creates a percent mine with the blocks in your selected area
   SetMineChance:
     aliases: [setminech, setmch, smc]
     permission: mine.create
     permission-message: "§CYou do not have permission to do that!"
     usage: "§C/SetMineChance [mine-name] [material] [chance]"
+    description: This command sets the chance for a material to spawn in a percent mine

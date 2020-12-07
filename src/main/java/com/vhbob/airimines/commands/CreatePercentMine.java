@@ -31,7 +31,7 @@ public class CreatePercentMine implements CommandExecutor {
                         try {
                             Region region = WorldEdit.getInstance().getSessionManager().get((SessionOwner) BukkitAdapter.adapt(p))
                                     .getSelection(BukkitAdapter.adapt(p.getWorld()));
-                            PercentMine mine = new PercentMine(strings[0], region);
+                            PercentMine mine = new PercentMine(strings[0], region, p.getLocation());
                             AiridaleMines.getPlugin().registerMine(mine);
                             p.sendMessage(ChatColor.GREEN + "Percentage mine created! Remember to set the notification area and add block rates!");
                             return true;

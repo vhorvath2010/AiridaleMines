@@ -41,7 +41,7 @@ public class CreateSchematicMine implements CommandExecutor {
                             } catch (WorldEditException e) {
                                 return false;
                             }
-                            SchematicMine mine = new SchematicMine(strings[0], region, clipboard);
+                            SchematicMine mine = new SchematicMine(strings[0], region, clipboard, p.getLocation());
                             AiridaleMines.getPlugin().registerMine(mine);
                             p.sendMessage(ChatColor.GREEN + "Schematic mine created! Remember to set the notification area!");
                             return true;
