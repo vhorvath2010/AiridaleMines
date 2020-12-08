@@ -1,4 +1,4 @@
 # This is how often each mine resets (in seconds)
-reset-interval: 10
+reset-interval: 60
 # This is the delay between layers resetting (in ticks)
 layer-delay: 5
