@@ -4,7 +4,11 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
 import com.vhbob.airimines.AiridaleMines;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
+import java.io.IOException;
 
 public abstract class Mine {
 
@@ -29,4 +33,9 @@ public abstract class Mine {
     public void setNotificationRegion(Region notificationRegion) {
         this.notificationRegion = notificationRegion;
     }
+
+    public abstract void endTask();
+
+    public abstract void saveMine() throws IOException, InvalidConfigurationException;
+
 }
