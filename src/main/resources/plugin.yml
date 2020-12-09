@@ -43,3 +43,9 @@ commands:
     permission: mine.manage
     permission-message: "§CYou do not have permission to do that!"
     description: List all mines
+  ResetMine:
+    aliases: [rmine]
+    permission: mine.manage
+    permission-message: "§CYou do not have permission to do that!"
+    description: Reset a mine
+    usage: "§C/ResetMine [name]"

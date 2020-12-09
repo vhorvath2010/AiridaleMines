@@ -29,7 +29,7 @@ public class PercentMine extends Mine {
     public PercentMine(String name, Region mineRegion, Location locTp) {
         chances = new RandomCollection<Material>();
         this.name = name;
-        this.mineBlocks = mineRegion;
+        this.mineBlocks = mineRegion.clone();
         this.locTp = locTp;
         long delay = (long) (20 * AiridaleMines.getPlugin().getConfig().getDouble("reset-interval"));
         long offset = (long) 100 * AiridaleMines.getPlugin().numActiveMines();
@@ -77,6 +77,8 @@ public class PercentMine extends Mine {
 
     @Override
     public void reset() {
+        if (chances.next() == null)
+            return;
         super.reset();
         BlockVector3 min = mineBlocks.getMinimumPoint();
         BlockVector3 max = mineBlocks.getMaximumPoint();

@@ -28,6 +28,7 @@ public class AiridaleMines extends JavaPlugin {
         getCommand("SetMineChance").setExecutor(new SetMineChance());
         getCommand("ListMines").setExecutor(new ListMines());
         getCommand("DeleteMine").setExecutor(new DeleteMine());
+        getCommand("ResetMine").setExecutor(new ResetMine());
         // Setup data files
         saveDefaultConfig();
         // Load mines

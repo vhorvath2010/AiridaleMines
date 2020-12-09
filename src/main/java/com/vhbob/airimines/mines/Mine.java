@@ -31,7 +31,7 @@ public abstract class Mine {
     }
 
     public void setNotificationRegion(Region notificationRegion) {
-        this.notificationRegion = notificationRegion;
+        this.notificationRegion = notificationRegion.clone();
     }
 
     public abstract void endTask();
