@@ -25,6 +25,9 @@ public class RandomCollection<E> {
     }
 
     public E next() {
+        if (map.size() == 0) {
+            return null;
+        }
         double value = random.nextDouble() * total;
         return map.higherEntry(value).getValue();
     }

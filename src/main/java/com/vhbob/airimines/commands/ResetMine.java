@@ -17,6 +17,7 @@ public class ResetMine implements CommandExecutor {
                 if (mine != null) {
                     mine.reset();
                     commandSender.sendMessage(ChatColor.GREEN + "Reset " + mine.getName());
+                    return true;
                 }
             }
         }

@@ -34,7 +34,7 @@ public class SchematicMine extends Mine {
     public SchematicMine(String name, Region mineBlocks, BlockArrayClipboard schematic, Location tpLoc) {
         this.name = name;
         this.tpLoc = tpLoc;
-        this.mineBlocks = mineBlocks;
+        this.mineBlocks = mineBlocks.clone();
         this.schematic = schematic;
         // Calculate offset for mine reset
         int mines = AiridaleMines.getPlugin().numActiveMines();
