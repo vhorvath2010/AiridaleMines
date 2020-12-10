@@ -30,16 +30,7 @@ public class PercentMine extends Mine {
         this.name = name;
         this.mineBlocks = mineRegion.clone();
         this.locTp = locTp;
-        long delay = (long) (20 * AiridaleMines.getPlugin().getConfig().getDouble("reset-interval"));
-        long offset = (long) 100 * AiridaleMines.getPlugin().numActiveMines();
-        taskID = new BukkitRunnable() {
-            @Override
-            public void run() {
-                reset();
-            }
-        }.runTaskTimer(AiridaleMines.getPlugin(), delay + offset, delay).getTaskId();
-        firstReset = System.currentTimeMillis() + (delay + offset) * 20 * 1000;
-        resetFrequency = delay * 20 * 1000;
+        activateTasks();
     }
 
     public PercentMine(String name) throws IOException, InvalidConfigurationException {
@@ -66,14 +57,7 @@ public class PercentMine extends Mine {
             Material type = Material.valueOf(typeName);
             this.chances.add(Double.parseDouble(minesConfig.getString("chance." + typeName)), type);
         }
-        long delay = (long) (20 * AiridaleMines.getPlugin().getConfig().getDouble("reset-interval"));
-        long offset = (long) 100 * AiridaleMines.getPlugin().numActiveMines();
-        this.taskID = new BukkitRunnable() {
-            @Override
-            public void run() {
-                reset();
-            }
-        }.runTaskTimer(AiridaleMines.getPlugin(), delay + offset, delay).getTaskId();
+        activateTasks();
     }
 
     @Override
@@ -114,10 +98,6 @@ public class PercentMine extends Mine {
 
     public void addBlock(Material type, int weight) {
         chances.add(weight, type);
-    }
-
-    public void endTask() {
-        Bukkit.getScheduler().cancelTask(taskID);
     }
 
     @Override

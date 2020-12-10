@@ -7,6 +7,7 @@ import com.vhbob.airimines.mines.PercentMine;
 import com.vhbob.airimines.mines.SchematicMine;
 import com.vhbob.airimines.util.ResetPlaceholder;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -60,6 +61,9 @@ public class AiridaleMines extends JavaPlugin {
         // Hook PlaceholderAPI
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new ResetPlaceholder().register();
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Placeholders Enabled!");
+        } else {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "PlaceholderAPI not found!");
         }
     }
 

@@ -35,19 +35,7 @@ public class SchematicMine extends Mine {
         this.tpLoc = tpLoc;
         this.mineBlocks = mineBlocks.clone();
         this.schematic = schematic;
-        // Calculate offset for mine reset
-        int mines = AiridaleMines.getPlugin().numActiveMines();
-        long offset = (long) 100 * mines;
-        // Schedule resets
-        long delay = (long) (20 * AiridaleMines.getPlugin().getConfig().getDouble("reset-interval"));
-        taskID = new BukkitRunnable() {
-            @Override
-            public void run() {
-                reset();
-            }
-        }.runTaskTimer(AiridaleMines.getPlugin(), delay + offset, delay).getTaskId();
-        firstReset = System.currentTimeMillis() + (delay + offset) * 20 * 1000;
-        resetFrequency = delay * 20 * 1000;
+        activateTasks();
     }
 
     public SchematicMine(String name) throws IOException, InvalidConfigurationException {
@@ -76,16 +64,7 @@ public class SchematicMine extends Mine {
             loadedBoard = reader.read();
         }
         this.schematic = (BlockArrayClipboard) loadedBoard;
-        int mines = AiridaleMines.getPlugin().numActiveMines();
-        long offset = (long) 100 * mines;
-        // Schedule resets
-        long delay = (long) (20 * AiridaleMines.getPlugin().getConfig().getDouble("reset-interval"));
-        taskID = new BukkitRunnable() {
-            @Override
-            public void run() {
-                reset();
-            }
-        }.runTaskTimer(AiridaleMines.getPlugin(), delay + offset, delay).getTaskId();
+        activateTasks();
     }
 
     @Override
@@ -108,10 +87,6 @@ public class SchematicMine extends Mine {
         } catch (WorldEditException e) {
             e.printStackTrace();
         }
-    }
-
-    public void endTask() {
-        Bukkit.getScheduler().cancelTask(taskID);
     }
 
     @Override

@@ -3,9 +3,11 @@ package com.vhbob.airimines.mines;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
 import com.vhbob.airimines.AiridaleMines;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 
@@ -14,11 +16,9 @@ public abstract class Mine {
     Region mineBlocks;
     Region notificationRegion;
     String name;
-    int taskID;
-    // The system time in milliseconds that the mine first reset
-    long firstReset;
-    // The frequency in milliseconds that the mine will reset
-    long resetFrequency;
+    int resetTaskID;
+    int placeholderTaskID;
+    long nextReset;
 
     // This method will begin to reset the mine
     public void reset() {
@@ -38,13 +38,38 @@ public abstract class Mine {
         this.notificationRegion = notificationRegion.clone();
     }
 
-    public abstract void endTask();
-
     public abstract void saveMine() throws IOException, InvalidConfigurationException;
 
+    public void activateTasks() {
+        // Setup mine resets
+        final long delay = (long) (20 * AiridaleMines.getPlugin().getConfig().getDouble("reset-interval"));
+        final long offset = (long) 100 * AiridaleMines.getPlugin().numActiveMines();
+        resetTaskID = new BukkitRunnable() {
+            @Override
+            public void run() {
+                reset();
+            }
+        }.runTaskTimer(AiridaleMines.getPlugin(), delay + offset, delay).getTaskId();
+        // Schedule placeholder updates
+        nextReset = (delay + offset) / 20;
+        placeholderTaskID = new BukkitRunnable() {
+            @Override
+            public void run() {
+                nextReset -= 1;
+                if (nextReset == 0) {
+                    nextReset = delay / 20;
+                }
+            }
+        }.runTaskTimer(AiridaleMines.getPlugin(), 0, 20).getTaskId();
+    }
+
+    public void endTask() {
+        Bukkit.getScheduler().cancelTask(resetTaskID);
+        Bukkit.getScheduler().cancelTask(placeholderTaskID);
+    }
+
     public String getUntilReset() {
-        String until = "N/A";
-        return until;
+        return String.format("%d:%02d", nextReset / 60, nextReset % 60);
     }
 
 }
