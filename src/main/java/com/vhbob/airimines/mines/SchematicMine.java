@@ -28,7 +28,6 @@ import java.io.*;
 public class SchematicMine extends Mine {
 
     private BlockArrayClipboard schematic;
-    private int taskID;
     private Location tpLoc;
 
     public SchematicMine(String name, Region mineBlocks, BlockArrayClipboard schematic, Location tpLoc) {
@@ -47,6 +46,8 @@ public class SchematicMine extends Mine {
                 reset();
             }
         }.runTaskTimer(AiridaleMines.getPlugin(), delay + offset, delay).getTaskId();
+        firstReset = System.currentTimeMillis() + (delay + offset) * 20 * 1000;
+        resetFrequency = delay * 20 * 1000;
     }
 
     public SchematicMine(String name) throws IOException, InvalidConfigurationException {

@@ -5,9 +5,9 @@ import com.vhbob.airimines.mines.ListMines;
 import com.vhbob.airimines.mines.Mine;
 import com.vhbob.airimines.mines.PercentMine;
 import com.vhbob.airimines.mines.SchematicMine;
+import com.vhbob.airimines.util.ResetPlaceholder;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -56,6 +56,10 @@ public class AiridaleMines extends JavaPlugin {
                     }
                 }
             }
+        }
+        // Hook PlaceholderAPI
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new ResetPlaceholder().register();
         }
     }
 
@@ -116,5 +120,14 @@ public class AiridaleMines extends JavaPlugin {
 
     public ArrayList<Mine> getActiveMines() {
         return activeMines;
+    }
+
+    public String getUntilReset(String mineName) {
+        String response = "Mine " + mineName + " not found";
+        Mine mine = getMine(mineName);
+        if (mine != null) {
+            response = mine.getUntilReset();
+        }
+        return response;
     }
 }

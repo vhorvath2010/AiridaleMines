@@ -23,7 +23,6 @@ import java.util.NavigableMap;
 public class PercentMine extends Mine {
 
     private RandomCollection<Material> chances;
-    private int taskID;
     private Location locTp;
 
     public PercentMine(String name, Region mineRegion, Location locTp) {
@@ -39,6 +38,8 @@ public class PercentMine extends Mine {
                 reset();
             }
         }.runTaskTimer(AiridaleMines.getPlugin(), delay + offset, delay).getTaskId();
+        firstReset = System.currentTimeMillis() + (delay + offset) * 20 * 1000;
+        resetFrequency = delay * 20 * 1000;
     }
 
     public PercentMine(String name) throws IOException, InvalidConfigurationException {
