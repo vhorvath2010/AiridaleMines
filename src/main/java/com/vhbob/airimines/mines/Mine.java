@@ -3,6 +3,8 @@ package com.vhbob.airimines.mines;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
 import com.vhbob.airimines.AiridaleMines;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -47,9 +49,31 @@ public abstract class Mine {
         resetTaskID = new BukkitRunnable() {
             @Override
             public void run() {
-                reset();
+                // Run countdown
+                final int[] countdown = {10};
+                final int countdownID = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        // Send countdown to players
+                        for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
+                            if (notificationRegion != null && notificationRegion.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
+                                p.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                                        TextComponent.fromLegacyText(ChatColor.RED + "Mine resetting in " + countdown[0] + "!"));
+                            }
+                        }
+                        countdown[0] = countdown[0] - 1;
+                    }
+                }.runTaskTimer(AiridaleMines.getPlugin(), 0, 20).getTaskId();
+                // Reset mine
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        reset();
+                        Bukkit.getScheduler().cancelTask(countdownID);
+                    }
+                }.runTaskLater(AiridaleMines.getPlugin(), 200);
             }
-        }.runTaskTimer(AiridaleMines.getPlugin(), delay + offset, delay).getTaskId();
+        }.runTaskTimer(AiridaleMines.getPlugin(), delay + offset - 200, delay).getTaskId();
         // Schedule placeholder updates
         nextReset = (delay + offset) / 20;
         placeholderTaskID = new BukkitRunnable() {
