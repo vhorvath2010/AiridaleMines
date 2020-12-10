@@ -44,7 +44,7 @@ public abstract class Mine {
 
     public String getUntilReset() {
         String until = "N/A";
-
+        return until;
     }
 
 }
