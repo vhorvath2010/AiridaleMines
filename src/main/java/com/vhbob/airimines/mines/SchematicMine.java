@@ -16,12 +16,15 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.vhbob.airimines.AiridaleMines;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.*;
 
@@ -60,6 +63,55 @@ public class SchematicMine extends Mine {
         }
         this.schematic = (BlockArrayClipboard) loadedBoard;
         activateTasks();
+    }
+
+    @Override
+    public void activateTasks()  {
+        // Setup mine resets
+        final long delay = (long) (20 * AiridaleMines.getPlugin().getConfig().getDouble("reset-interval"));
+        final long offset = (long) 100 * AiridaleMines.getPlugin().numActiveMines();
+        final ProtectedRegion insideMine = WorldGuard.getInstance().getPlatform().getRegionContainer()
+                .get(BukkitAdapter.adapt(tpLoc.getWorld())).getRegion("mine-" + name);
+        resetTaskID = new BukkitRunnable() {
+            @Override
+            public void run() {
+                // Run countdown
+                final int[] countdown = {10};
+                final int countdownID = new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        // Send countdown to players
+                        for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
+                            if (insideMine != null && insideMine.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
+                                p.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                                        TextComponent.fromLegacyText(ChatColor.RED + ""
+                                                + ChatColor.BOLD + "Mine resetting in " + countdown[0] + "!"));
+                            }
+                        }
+                        countdown[0] = countdown[0] - 1;
+                    }
+                }.runTaskTimer(AiridaleMines.getPlugin(), 0, 20).getTaskId();
+                // Reset mine
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        reset();
+                        Bukkit.getScheduler().cancelTask(countdownID);
+                    }
+                }.runTaskLater(AiridaleMines.getPlugin(), 200);
+            }
+        }.runTaskTimer(AiridaleMines.getPlugin(), delay + offset - 200, delay).getTaskId();
+        // Schedule placeholder updates
+        nextReset = (delay + offset) / 20;
+        placeholderTaskID = new BukkitRunnable() {
+            @Override
+            public void run() {
+                nextReset -= 1;
+                if (nextReset == 0) {
+                    nextReset = delay / 20;
+                }
+            }
+        }.runTaskTimer(AiridaleMines.getPlugin(), 0, 20).getTaskId();
     }
 
     @Override
