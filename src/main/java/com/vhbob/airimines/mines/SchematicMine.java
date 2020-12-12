@@ -67,10 +67,11 @@ public class SchematicMine extends Mine {
         super.reset();
         // Tp out of mine
         ProtectedRegion insideMine = WorldGuard.getInstance().getPlatform().getRegionContainer()
-                .get(BukkitAdapter.adapt(tpLoc.getWorld())).getRegion("mine." + name);
+                .get(BukkitAdapter.adapt(tpLoc.getWorld())).getRegion("mine-" + name);
         for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
             if (insideMine.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
                 p.teleport(tpLoc);
+                p.sendMessage(ChatColor.RED + "The mine you were in is resetting!");
             }
         }
         // Load blocks
