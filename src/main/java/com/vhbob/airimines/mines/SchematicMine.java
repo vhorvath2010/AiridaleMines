@@ -116,7 +116,6 @@ public class SchematicMine extends Mine {
 
     @Override
     public void reset() {
-        super.reset();
         // Tp out of mine
         ProtectedRegion insideMine = WorldGuard.getInstance().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(tpLoc.getWorld())).getRegion("mine-" + name);

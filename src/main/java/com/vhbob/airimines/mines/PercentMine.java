@@ -18,7 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.NavigableMap;
+import java.util.HashMap;
 
 public class PercentMine extends Mine {
 
@@ -169,11 +169,10 @@ public class PercentMine extends Mine {
         minesConfig.set("notify.max.x", notificationRegion.getMaximumPoint().getBlockX());
         minesConfig.set("notify.max.y", notificationRegion.getMaximumPoint().getBlockY());
         minesConfig.set("notify.max.z", notificationRegion.getMaximumPoint().getBlockZ());
-        NavigableMap<Double, Material> chanceMap = chances.values();
-        double cumulativeChance = 0;
-        for (Double chance : chanceMap.keySet()) {
-            minesConfig.set("chance." + chanceMap.get(chance), chance - cumulativeChance);
-            cumulativeChance += chance;
+        // Save percentages
+        HashMap<Material, Double> chanceMap = chances.getChances();
+        for (Material type : chanceMap.keySet()) {
+            minesConfig.set("chance." + type.toString(), chanceMap.get(type));
         }
         // Save file
         minesConfig.save(minesFile);
