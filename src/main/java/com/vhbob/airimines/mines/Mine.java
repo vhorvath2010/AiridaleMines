@@ -16,11 +16,11 @@ import java.io.IOException;
 public abstract class Mine {
 
     Region mineBlocks;
-    Region notificationRegion;
     String name;
     int resetTaskID;
     int placeholderTaskID;
     long nextReset;
+    Region notificationRegion;
 
     // This method will begin to reset the mine
     public void reset() {
@@ -42,7 +42,7 @@ public abstract class Mine {
 
     public abstract void saveMine() throws IOException, InvalidConfigurationException;
 
-    public void activateTasks() {
+    public void activateTasks()  {
         // Setup mine resets
         final long delay = (long) (20 * AiridaleMines.getPlugin().getConfig().getDouble("reset-interval"));
         final long offset = (long) 100 * AiridaleMines.getPlugin().numActiveMines();

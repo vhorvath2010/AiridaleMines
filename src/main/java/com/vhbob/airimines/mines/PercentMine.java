@@ -1,11 +1,9 @@
 package com.vhbob.airimines.mines;
 
-import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.regions.RegionSelector;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.vhbob.airimines.AiridaleMines;
@@ -65,6 +63,7 @@ public class PercentMine extends Mine {
         if (chances.next() == null)
             return;
         super.reset();
+        // TP at proper time
         BlockVector3 min = mineBlocks.getMinimumPoint();
         BlockVector3 max = mineBlocks.getMaximumPoint();
         int configDelay = AiridaleMines.getPlugin().getConfig().getInt("layer-delay");

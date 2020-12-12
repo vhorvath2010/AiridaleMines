@@ -13,15 +13,15 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.vhbob.airimines.AiridaleMines;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.*;
 
@@ -51,11 +51,6 @@ public class SchematicMine extends Mine {
         BlockVector3 bMax = BlockVector3.at(minesConfig.getInt("blocks.max.x"),
                 minesConfig.getInt("blocks.max.y"),minesConfig.getInt("blocks.max.z"));
         this.mineBlocks = new CuboidRegion(BukkitAdapter.adapt(tpLoc.getWorld()), bMin, bMax);
-        BlockVector3 nMin = BlockVector3.at(minesConfig.getInt("notify.min.x"),
-                minesConfig.getInt("notify.min.y"),minesConfig.getInt("notify.min.z"));
-        BlockVector3 nMax = BlockVector3.at(minesConfig.getInt("notify.max.x"),
-                minesConfig.getInt("notify.max.y"),minesConfig.getInt("notify.max.z"));
-        this.notificationRegion = new CuboidRegion(BukkitAdapter.adapt(tpLoc.getWorld()), nMin, nMax);
         // Load schematic
         File file = new File(AiridaleMines.getPlugin().getDataFolder() + File.separator + "mines", name + ".schem");
         ClipboardFormat format = ClipboardFormats.findByFile(file);
@@ -71,8 +66,10 @@ public class SchematicMine extends Mine {
     public void reset() {
         super.reset();
         // Tp out of mine
+        ProtectedRegion insideMine = WorldGuard.getInstance().getPlatform().getRegionContainer()
+                .get(BukkitAdapter.adapt(tpLoc.getWorld())).getRegion("mine." + name);
         for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
-            if (notificationRegion.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
+            if (insideMine.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
                 p.teleport(tpLoc);
             }
         }
@@ -105,13 +102,6 @@ public class SchematicMine extends Mine {
         minesConfig.set("blocks.max.x", mineBlocks.getMaximumPoint().getBlockX());
         minesConfig.set("blocks.max.y", mineBlocks.getMaximumPoint().getBlockY());
         minesConfig.set("blocks.max.z", mineBlocks.getMaximumPoint().getBlockZ());
-        // Save notify region
-        minesConfig.set("notify.min.x", notificationRegion.getMinimumPoint().getBlockX());
-        minesConfig.set("notify.min.y", notificationRegion.getMinimumPoint().getBlockY());
-        minesConfig.set("notify.min.z", notificationRegion.getMinimumPoint().getBlockZ());
-        minesConfig.set("notify.max.x", notificationRegion.getMaximumPoint().getBlockX());
-        minesConfig.set("notify.max.y", notificationRegion.getMaximumPoint().getBlockY());
-        minesConfig.set("notify.max.z", notificationRegion.getMaximumPoint().getBlockZ());
         // Save file
         minesConfig.save(minesFile);
     }
