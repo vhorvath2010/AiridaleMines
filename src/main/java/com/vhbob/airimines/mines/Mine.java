@@ -58,7 +58,8 @@ public abstract class Mine {
                         for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
                             if (notificationRegion != null && notificationRegion.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
                                 p.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                                        TextComponent.fromLegacyText(ChatColor.RED + "Mine resetting in " + countdown[0] + "!"));
+                                        TextComponent.fromLegacyText(ChatColor.RED + ""
+                                                + ChatColor.BOLD + "Mine resetting in " + countdown[0] + "!"));
                             }
                         }
                         countdown[0] = countdown[0] - 1;

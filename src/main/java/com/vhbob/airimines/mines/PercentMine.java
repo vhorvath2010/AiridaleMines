@@ -122,8 +122,10 @@ public class PercentMine extends Mine {
         minesConfig.set("notify.max.y", notificationRegion.getMaximumPoint().getBlockY());
         minesConfig.set("notify.max.z", notificationRegion.getMaximumPoint().getBlockZ());
         NavigableMap<Double, Material> chanceMap = chances.values();
+        double cumulativeChance = 0;
         for (Double chance : chanceMap.keySet()) {
-            minesConfig.set("chance." + chanceMap.get(chance), chance);
+            minesConfig.set("chance." + chanceMap.get(chance), chance - cumulativeChance);
+            cumulativeChance += chance;
         }
         // Save file
         minesConfig.save(minesFile);
