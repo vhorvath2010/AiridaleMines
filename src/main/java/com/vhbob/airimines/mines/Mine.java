@@ -26,6 +26,10 @@ public abstract class Mine {
     public void reset() {
         // Notify players
         for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
+            // Ensure they're in the same world
+            if (!p.getLocation().getWorld().equals(notificationRegion.getWorld())) {
+                continue;
+            }
             if (notificationRegion != null && notificationRegion.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
                 p.sendMessage(ChatColor.RED + "The mine you are in is resetting!");
             }
