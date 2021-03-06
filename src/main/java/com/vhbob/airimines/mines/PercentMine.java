@@ -75,6 +75,10 @@ public class PercentMine extends Mine {
                     public void run() {
                         // Send countdown to players
                         for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
+                            // Ensure they're in the same world
+                            if (!p.getLocation().getWorld().equals(notificationRegion.getWorld())) {
+                                continue;
+                            }
                             if (notificationRegion != null && notificationRegion.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
                                 p.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                                         TextComponent.fromLegacyText(ChatColor.RED + ""
@@ -128,6 +132,10 @@ public class PercentMine extends Mine {
                     BlockVector3 layerMax = BlockVector3.at(max.getX(), finalY, max.getZ());
                     ProtectedRegion region = new ProtectedCuboidRegion("test", layerMin, layerMax);
                     for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
+                        // Ensure they're in the same world
+                        if (!p.getLocation().getWorld().equals(notificationRegion.getWorld())) {
+                            continue;
+                        }
                         if (region.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
                             p.teleport(locTp);
                         }

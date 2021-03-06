@@ -82,6 +82,10 @@ public class SchematicMine extends Mine {
                     public void run() {
                         // Send countdown to players
                         for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
+                            // Ensure they're in the same world
+                            if (!p.getLocation().getWorld().equals(notificationRegion.getWorld())) {
+                                continue;
+                            }
                             if (insideMine != null && insideMine.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
                                 p.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                                         TextComponent.fromLegacyText(ChatColor.RED + ""
@@ -120,6 +124,10 @@ public class SchematicMine extends Mine {
         ProtectedRegion insideMine = WorldGuard.getInstance().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(tpLoc.getWorld())).getRegion("mine-" + name);
         for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
+            // Ensure they're in the same world
+            if (!p.getLocation().getWorld().equals(notificationRegion.getWorld())) {
+                continue;
+            }
             if (insideMine.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
                 p.teleport(tpLoc);
                 p.sendMessage(ChatColor.RED + "The mine you were in is resetting!");
