@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,13 +22,14 @@ public abstract class Mine {
     int placeholderTaskID;
     long nextReset;
     Region notificationRegion;
+    Location tpLoc;
 
     // This method will begin to reset the mine
     public void reset() {
         // Notify players
         for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
             // Ensure they're in the same world
-            if (!p.getLocation().getWorld().equals(notificationRegion.getWorld())) {
+            if (!p.getLocation().getWorld().equals(tpLoc.getWorld())) {
                 continue;
             }
             if (notificationRegion != null && notificationRegion.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {

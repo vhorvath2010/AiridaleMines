@@ -31,7 +31,6 @@ import java.io.*;
 public class SchematicMine extends Mine {
 
     private BlockArrayClipboard schematic;
-    private Location tpLoc;
 
     public SchematicMine(String name, Region mineBlocks, BlockArrayClipboard schematic, Location tpLoc) {
         this.name = name;
@@ -83,7 +82,7 @@ public class SchematicMine extends Mine {
                         // Send countdown to players
                         for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
                             // Ensure they're in the same world
-                            if (!p.getLocation().getWorld().equals(notificationRegion.getWorld())) {
+                            if (!p.getLocation().getWorld().equals(tpLoc.getWorld())) {
                                 continue;
                             }
                             if (insideMine != null && insideMine.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
@@ -125,7 +124,7 @@ public class SchematicMine extends Mine {
                 .get(BukkitAdapter.adapt(tpLoc.getWorld())).getRegion("mine-" + name);
         for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
             // Ensure they're in the same world
-            if (!p.getLocation().getWorld().equals(notificationRegion.getWorld())) {
+            if (!p.getLocation().getWorld().equals(tpLoc.getWorld())) {
                 continue;
             }
             if (insideMine.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {

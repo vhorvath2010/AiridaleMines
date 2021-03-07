@@ -23,13 +23,12 @@ import java.util.HashMap;
 public class PercentMine extends Mine {
 
     private RandomCollection<Material> chances;
-    private Location locTp;
 
-    public PercentMine(String name, Region mineRegion, Location locTp) {
+    public PercentMine(String name, Region mineRegion, Location tpLoc) {
         chances = new RandomCollection<Material>();
         this.name = name;
         this.mineBlocks = mineRegion.clone();
-        this.locTp = locTp;
+        this.tpLoc = tpLoc;
         activateTasks();
     }
 
@@ -40,18 +39,18 @@ public class PercentMine extends Mine {
         minesConfig.load(minesFile);
         // Load basic data
         this.name = minesConfig.getString("name");
-        this.locTp = (Location) minesConfig.get("loc");
+        this.tpLoc = (Location) minesConfig.get("loc");
         // Load regions
         BlockVector3 bMin = BlockVector3.at(minesConfig.getInt("blocks.min.x"),
                 minesConfig.getInt("blocks.min.y"),minesConfig.getInt("blocks.min.z"));
         BlockVector3 bMax = BlockVector3.at(minesConfig.getInt("blocks.max.x"),
                 minesConfig.getInt("blocks.max.y"),minesConfig.getInt("blocks.max.z"));
-        this.mineBlocks = new CuboidRegion(BukkitAdapter.adapt(locTp.getWorld()), bMin, bMax);
+        this.mineBlocks = new CuboidRegion(BukkitAdapter.adapt(tpLoc.getWorld()), bMin, bMax);
         BlockVector3 nMin = BlockVector3.at(minesConfig.getInt("notify.min.x"),
                 minesConfig.getInt("notify.min.y"),minesConfig.getInt("notify.min.z"));
         BlockVector3 nMax = BlockVector3.at(minesConfig.getInt("notify.max.x"),
                 minesConfig.getInt("notify.max.y"),minesConfig.getInt("notify.max.z"));
-        this.notificationRegion = new CuboidRegion(BukkitAdapter.adapt(locTp.getWorld()), nMin, nMax);
+        this.notificationRegion = new CuboidRegion(BukkitAdapter.adapt(tpLoc.getWorld()), nMin, nMax);
         this.chances = new RandomCollection<Material>();
         for (String typeName : minesConfig.getConfigurationSection("chance").getKeys(false)) {
             Material type = Material.valueOf(typeName);
@@ -76,7 +75,7 @@ public class PercentMine extends Mine {
                         // Send countdown to players
                         for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
                             // Ensure they're in the same world
-                            if (!p.getLocation().getWorld().equals(notificationRegion.getWorld())) {
+                            if (!p.getLocation().getWorld().equals(tpLoc.getWorld())) {
                                 continue;
                             }
                             if (notificationRegion != null && notificationRegion.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
@@ -133,11 +132,11 @@ public class PercentMine extends Mine {
                     ProtectedRegion region = new ProtectedCuboidRegion("test", layerMin, layerMax);
                     for (Player p : AiridaleMines.getPlugin().getServer().getOnlinePlayers()) {
                         // Ensure they're in the same world
-                        if (!p.getLocation().getWorld().equals(notificationRegion.getWorld())) {
+                        if (!p.getLocation().getWorld().equals(tpLoc.getWorld())) {
                             continue;
                         }
                         if (region.contains(BukkitAdapter.asBlockVector(p.getLocation()))) {
-                            p.teleport(locTp);
+                            p.teleport(tpLoc);
                         }
                     }
                     // Set blocks
@@ -162,7 +161,7 @@ public class PercentMine extends Mine {
         YamlConfiguration minesConfig = new YamlConfiguration();
         // Save data
         minesConfig.set("name", name);
-        minesConfig.set("loc", locTp);
+        minesConfig.set("loc", tpLoc);
         // Save blocks region
         minesConfig.set("blocks.min.x", mineBlocks.getMinimumPoint().getBlockX());
         minesConfig.set("blocks.min.y", mineBlocks.getMinimumPoint().getBlockY());
